@@ -21,11 +21,6 @@
 # SOFTWARE.
 # 
 
-project(ek-memory)
-
-set(SRC
-        StackAllocator.cpp)
-
-add_library(ek-memory STATIC ${SRC})
-
-target_link_libraries(ek-memory ek-utils)
+if(EK_BUILD_MEMORY)
+    add_subdirectory(Memory)
+endif()

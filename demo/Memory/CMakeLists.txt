@@ -21,11 +21,12 @@
 # SOFTWARE.
 # 
 
-project(ek-memory)
+project(StackAllocatorExample)
 
 set(SRC
-        StackAllocator.cpp)
+    ../SampleClass.cpp
+    StackAllocatorExample.cpp)
 
-add_library(ek-memory STATIC ${SRC})
+add_executable(StackAllocatorExample ${SRC})
 
-target_link_libraries(ek-memory ek-utils)
+target_link_libraries(StackAllocatorExample ek-utils ek-memory)
