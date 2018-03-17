@@ -23,26 +23,45 @@
 
 #pragma once
 
-/* Specific variable sizes */
-#include <cstdint>
+#include "Ek/Memory/Memory.hpp"
 
-/* Needed by ALLOC_NEW */
-#include <new>
+namespace ek
+{
+  class FrameAllocator
+  {
+  private:
+    typedef struct s_frame_slot {
+      std::uint64_t size;
+      struct s_frame_slot *next;
+    } t_frame_slot;
 
-/* Wrapper for the new keyword with custom allocator */
-#define ALLOC_NEW(Alloc, Type, ...) (new (Alloc.allocate(sizeof(Type))) Type(__VA_ARGS__));
+    typedef struct s_frame_page {
+      struct s_frame_page *next;
+    } t_frame_page;
 
-/* Wrapper for deleting data with custom allocator */
-#define ALLOC_FREE(Alloc, Ptr) (Alloc.free(Ptr))
+    void *_systemAlloc(std::uint64_t const);
+    void  _systemFree(void *);
 
-/* Align Value on Size bytes */
-#define ALIGN(Value, Size) (((Value) + ((Size) - (1))) & ~ ((Size) - (1)))
+    void  _pageAlloc();
 
-/* Default size alignment: 8 bytes pointer */
-#define DEFAULT_ALIGN_SIZE 8
+    void *_slotAlloc();
 
-/* 64 Kb */
-#define DEFAULT_PAGE_SIZE 65536
+    std::uint64_t _headerPageSize;
+    std::uint64_t _headerSlotSize;
+    std::uint64_t _pageSize;
+    std::uint64_t _slotSize;
 
-/* Default frame slot size */
-#define DEFAULT_FRAME_SLOT_SIZE 64
+    t_frame_page *_currentPage;
+    t_frame_slot *_currentSlot;
+
+  public:
+    FrameAllocator(std::uint64_t = DEFAULT_PAGE_SIZE, std::uint64_t = DEFAULT_FRAME_SLOT_SIZE);
+    ~FrameAllocator();
+
+    FrameAllocator(FrameAllocator const &) = delete;
+    void operator=(FrameAllocator const &) = delete;
+
+    void *allocate(std::uint64_t const) throw();
+    void free(void *);
+  };
+};

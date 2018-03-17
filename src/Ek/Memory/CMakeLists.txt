@@ -24,7 +24,8 @@
 project(ek-memory)
 
 set(SRC
-        StackAllocator.cpp)
+        StackAllocator.cpp
+        FrameAllocator.cpp)
 
 add_library(ek-memory STATIC ${SRC})
 

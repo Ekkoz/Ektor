@@ -23,26 +23,8 @@
 
 #pragma once
 
-/* Specific variable sizes */
-#include <cstdint>
+/* Returns max value between a and b */
+#define MAX(a, b) ((a > b) ? a : b)
 
-/* Needed by ALLOC_NEW */
-#include <new>
-
-/* Wrapper for the new keyword with custom allocator */
-#define ALLOC_NEW(Alloc, Type, ...) (new (Alloc.allocate(sizeof(Type))) Type(__VA_ARGS__));
-
-/* Wrapper for deleting data with custom allocator */
-#define ALLOC_FREE(Alloc, Ptr) (Alloc.free(Ptr))
-
-/* Align Value on Size bytes */
-#define ALIGN(Value, Size) (((Value) + ((Size) - (1))) & ~ ((Size) - (1)))
-
-/* Default size alignment: 8 bytes pointer */
-#define DEFAULT_ALIGN_SIZE 8
-
-/* 64 Kb */
-#define DEFAULT_PAGE_SIZE 65536
-
-/* Default frame slot size */
-#define DEFAULT_FRAME_SLOT_SIZE 64
+/* Returns min value between a and b */
+#define MIN(a, b) ((a < b) ? a : b)
