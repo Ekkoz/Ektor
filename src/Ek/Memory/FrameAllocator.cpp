@@ -102,7 +102,10 @@ namespace ek
 
     DEBUG("FrameAllocator: Allocate");
     if (size > this->_slotSize)
+    {
+      ERROR("FrameAllocator: A frame of " << size << " bytes has been asked; max frame size available: " << this->_slotSize << " bytes.");
       throw std::bad_alloc();
+    }
     if (!this->_currentSlot)
       this->_pageAlloc();
     ptr = this->_slotAlloc();

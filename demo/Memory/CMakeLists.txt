@@ -21,6 +21,10 @@
 # SOFTWARE.
 # 
 
+# 
+# STACK ALLOCATOR EXAMPLE
+# 
+
 project(StackAllocatorExample)
 
 set(SRC
@@ -30,3 +34,17 @@ set(SRC
 add_executable(StackAllocatorExample ${SRC})
 
 target_link_libraries(StackAllocatorExample ek-utils ek-memory)
+
+# 
+# FRAME ALLOCATOR EXAMPLE
+# 
+
+project(FrameAllocatorExample)
+
+set(SRC
+    ../SampleClass.cpp
+    FrameAllocatorExample.cpp)
+
+add_executable(FrameAllocatorExample ${SRC})
+
+target_link_libraries(FrameAllocatorExample ek-utils ek-memory)
