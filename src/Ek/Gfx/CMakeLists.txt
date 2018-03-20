@@ -21,25 +21,33 @@
 # SOFTWARE.
 # 
 
-cmake_minimum_required(VERSION 2.8.3)
+project(ek-gfx)
 
-macro(ek_set_option var default type docstring)
-    if(NOT DEFINED ${var})
-        set(${var} ${default})
-    endif()
-    set(${var} ${${var}} CACHE ${type} ${docstring} FORCE)
-endmacro()
+set(SRC
+        IWindowImpl.cpp
+        Window.cpp)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src)
-set(LIBRARY_OUTPUT_PATH "${PROJECT_BINARY_DIR}/lib")
-set(EXECUTABLE_OUTPUT_PATH "${PROJECT_BINARY_DIR}/demo")
+set(GFX_SPECIFIC_FLAGS "")
 
-ek_set_option(EK_BUILD_EXAMPLES TRUE BOOL "TRUE to build Ek's examples.")
-ek_set_option(EK_BUILD_MEMORY TRUE BOOL "TRUE to build Ek's Memory module.")
-
-add_subdirectory(src/Ek)
-
-if(EK_BUILD_EXAMPLES)
-    add_subdirectory(demo)
+if(WIN32)
+        set(SRC ${SRC}
+                Win32/WindowImplWin32.cpp)
 endif()
+
+if(APPLE)
+        set(SRC ${SRC}
+                OSX/WindowImplCocoa.cpp)
+endif()
+
+if(UNIX AND NOT APPLE)
+        set(SRC ${SRC}
+                Unix/WindowImplX11.cpp)
+        
+        set(GFX_SPECIFIC_FLAGS ${GFX_SPECIFIC_FLAGS}
+                "-lGL"
+                "-lX11")
+endif()
+
+add_library(ek-gfx STATIC ${SRC})
+
+target_link_libraries(ek-gfx ek-utils ${GFX_SPECIFIC_FLAGS})

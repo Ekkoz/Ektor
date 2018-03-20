@@ -24,4 +24,5 @@
 if(EK_BUILD_MEMORY)
     add_subdirectory(Utils)
     add_subdirectory(Memory)
+    add_subdirectory(Gfx)
 endif()
